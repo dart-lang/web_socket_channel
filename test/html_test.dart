@@ -10,6 +10,7 @@
     "html_test_server.dart.")
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
 
@@ -50,6 +51,15 @@ void main() {
     var queue = new StreamQueue(channel.stream);
     channel.sink.add("foo");
     expect(await queue.next, equals("foo"));
+  });
+
+  test("sends raw UTF-8 bytes", () async {
+    var webSocket = new WebSocket("ws://localhost:1234");
+    channel = new HtmlWebSocketChannel(webSocket);
+
+    var queue = new StreamQueue(channel.stream);
+    channel.sink.addUtf8Text(UTF8.encode("ṗĭñḡ"));
+    expect(await queue.next, equals("ṗĭñḡ"));
   });
 
   test(".connect defaults to binary lists", () async {

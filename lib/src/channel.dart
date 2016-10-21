@@ -98,14 +98,24 @@ class WebSocketChannel extends StreamChannelMixin {
 
 /// The sink exposed by a [WebSocketChannel].
 ///
-/// This is like a normal [StreamSink], except that it supports extra arguments
-/// to [close].
+/// This is like a normal [StreamSink], except that it supports [addUtf8Text]
+/// and extra arguments to [close].
 class WebSocketSink extends DelegatingStreamSink {
   final WebSocketImpl _webSocket;
 
   WebSocketSink._(WebSocketImpl webSocket)
       : _webSocket = webSocket,
         super(webSocket);
+
+  /// Sends a text message with text represented by [bytes].
+  ///
+  /// The [bytes] should be valid UTF-8 encoded Unicode characters. If they are
+  /// not, the receiving end will close the connection.
+  ///
+  /// On some implementations (such as [IOWebSocketChannel]), this avoids the
+  /// overhead of encoding [bytes] as a UTF-16 Dart string and then back to
+  /// UTF-8 to send across the socket.
+  void addUtf8Text(List<int> bytes) => _webSocket.addUtf8Text(bytes);
 
   /// Closes the web socket connection.
   ///

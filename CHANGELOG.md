@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Add `WebSocketSink.addUtf8Text()`. This matches `dart:io`'s
+  `WebSocket.addUtf8Text()`.
+
 ## 1.0.4
 
 * Support `crypto` 2.0.0.

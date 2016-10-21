@@ -9,7 +9,7 @@
 // Because it's copied directly, there are no modifications from the original.
 //
 // This is up-to-date as of sdk revision
-// e41fb4cafd6052157dbc1490d437045240f4773f.
+// b40c20bfbccd0e4d98d194b9d362d04a9f7c91f3.
 
 import 'dart:math';
 import 'dart:typed_data';
@@ -55,7 +55,7 @@ abstract class BytesBuilder {
   /**
    * Returns the contents of `this` and clears `this`.
    *
-   * The list returned is a view of the the internal buffer, limited to the
+   * The list returned is a view of the internal buffer, limited to the
    * [length].
    */
   List<int> takeBytes();
@@ -163,14 +163,17 @@ class _CopyingBytesBuilder implements BytesBuilder {
 
 class _BytesBuilder implements BytesBuilder {
   int _length = 0;
-  final _chunks = <List<int>>[];
+  final List<Uint8List> _chunks = [];
 
   void add(List<int> bytes) {
-    if (bytes is! Uint8List) {
-      bytes = new Uint8List.fromList(bytes);
+    Uint8List typedBytes;
+    if (bytes is Uint8List) {
+      typedBytes = bytes;
+    } else {
+      typedBytes = new Uint8List.fromList(bytes);
     }
-    _chunks.add(bytes);
-    _length += bytes.length;
+    _chunks.add(typedBytes);
+    _length += typedBytes.length;
   }
 
   void addByte(int byte) { add([byte]); }

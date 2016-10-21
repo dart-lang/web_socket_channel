@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'channel.dart';
 
@@ -87,6 +88,17 @@ class _CompleterSink implements WebSocketSink {
     } else {
       _ensureController();
       _controller.add(event);
+    }
+  }
+
+  void addUtf8Text(List<int> bytes) {
+    if (_canSendDirectly) {
+      _destinationSink.addUtf8Text(bytes);
+    } else {
+      _ensureController();
+      // Ideally we wouldn't ever have to decode these bytes, but it's the
+      // cleanest way to get [setDestinationSink] to work.
+      _controller.add(UTF8.decode(bytes));
     }
   }
 

@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
 
@@ -128,6 +129,8 @@ class _HtmlWebSocketSink extends DelegatingStreamSink implements WebSocketSink {
   _HtmlWebSocketSink(HtmlWebSocketChannel channel)
       : _channel = channel,
         super(channel._controller.foreign.sink);
+
+  void addUtf8Text(List<int> bytes) => super.add(UTF8.decode(bytes));
 
   Future close([int closeCode, String closeReason]) {
     _channel._localCloseCode = closeCode;

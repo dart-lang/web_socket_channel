@@ -88,6 +88,8 @@ class _IOWebSocketSink extends DelegatingStreamSink implements WebSocketSink {
       : _webSocket = webSocket,
         super(webSocket);
 
+  void addUtf8Text(List<int> bytes) => _webSocket.addUtf8Text(bytes);
+
   Future close([int closeCode, String closeReason]) =>
       _webSocket.close(closeCode, closeReason);
 }

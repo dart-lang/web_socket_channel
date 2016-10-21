@@ -5,6 +5,7 @@
 @TestOn('vm')
 
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:test/test.dart';
 
@@ -47,6 +48,21 @@ void main() {
       expect(channel.closeCode, equals(5678));
       expect(channel.closeReason, equals("raisin"));
     }));
+  });
+
+  test("sends raw UTF-8 bytes", () async {
+    server = await HttpServer.bind("localhost", 0);
+    server.transform(new WebSocketTransformer()).listen((webSocket) {
+      var channel = new IOWebSocketChannel(webSocket);
+      channel.stream.listen((request) {
+        expect(request, equals("ṗĭñḡ"));
+        channel.close();
+      });
+    });
+
+    var channel = new IOWebSocketChannel.connect(
+        "ws://localhost:${server.port}");
+    channel.sink.addUtf8Text(UTF8.encode("ṗĭñḡ"));
   });
 
   test(".connect communicates immediately", () async {

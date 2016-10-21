@@ -10,7 +10,7 @@
 // desired public API and to remove "dart:io" dependencies have been made.
 //
 // This is up-to-date as of sdk revision
-// e41fb4cafd6052157dbc1490d437045240f4773f.
+// b40c20bfbccd0e4d98d194b9d362d04a9f7c91f3.
 
 import 'dart:async';
 import 'dart:convert';
@@ -57,21 +57,14 @@ class _WebSocketOpcode {
   static const int RESERVED_F = 15;
 }
 
-/**
- *  Stores the header and integer value derived from negotiation of
- *  client_max_window_bits and server_max_window_bits. headerValue will be
- *  set in the Websocket response headers.
- */
-class _CompressionMaxWindowBits {
-  String headerValue;
-  int maxWindowBits;
-  _CompressionMaxWindowBits([this.headerValue, this.maxWindowBits]);
-  String toString() => headerValue;
+class _EncodedString {
+  final List<int> bytes;
+  _EncodedString(this.bytes);
 }
 
 /**
  * The web socket protocol transformer handles the protocol byte stream
- * which is supplied through the [:handleData:]. As the protocol is processed,
+ * which is supplied through the `handleData`. As the protocol is processed,
  * it'll output frame data as either a List<int> or String.
  *
  * Important information about usage: Be sure you use cancelOnError, so the
@@ -80,7 +73,8 @@ class _CompressionMaxWindowBits {
  */
 // TODO(ajohnsen): make this transformer reusable?
 class _WebSocketProtocolTransformer
-    implements StreamTransformer<List<int>, dynamic>, EventSink<List<int>> {
+    implements EventSink<List<int>>, StreamTransformer<
+        List<int>, dynamic/*List<int>|_WebSocketPing|_WebSocketPong>*/> {
   static const int START = 0;
   static const int LEN_FIRST = 1;
   static const int LEN_REST = 2;
@@ -108,7 +102,7 @@ class _WebSocketProtocolTransformer
   int closeCode = WebSocketStatus.NO_STATUS_RECEIVED;
   String closeReason = "";
 
-  EventSink _eventSink;
+  EventSink<dynamic/*List<int>|_WebSocketPing|_WebSocketPong>*/> _eventSink;
 
   final bool _serverSide;
   final List _maskingBytes = new List(4);
@@ -116,7 +110,8 @@ class _WebSocketProtocolTransformer
 
   _WebSocketProtocolTransformer([this._serverSide = false]);
 
-  Stream bind(Stream stream) {
+  Stream<dynamic/*List<int>|_WebSocketPing|_WebSocketPong>*/> bind(
+      Stream<List<int>> stream) {
     return new Stream.eventTransformed(stream, (EventSink eventSink) {
       if (_eventSink != null) {
         throw new StateError("WebSocket transformer already used.");
@@ -422,7 +417,8 @@ class _WebSocketOutgoingTransformer
   _WebSocketOutgoingTransformer(this.webSocket);
 
   Stream<List<int>> bind(Stream stream) {
-    return new Stream.eventTransformed(stream, (eventSink) {
+    return new Stream<List<int>>.eventTransformed(
+        stream, (EventSink<List<int>> eventSink) {
       if (_eventSink != null) {
         throw new StateError("WebSocket transformer already used");
       }
@@ -446,13 +442,14 @@ class _WebSocketOutgoingTransformer
       if (message is String) {
         opcode = _WebSocketOpcode.TEXT;
         data = UTF8.encode(message);
+      } else if (message is List<int>) {
+        opcode = _WebSocketOpcode.BINARY;
+        data = message;
+      } else if (message is _EncodedString) {
+        opcode = _WebSocketOpcode.TEXT;
+        data = message.bytes;
       } else {
-        if (message is List<int>) {
-          data = message;
-          opcode = _WebSocketOpcode.BINARY;
-        } else {
-          throw new ArgumentError(message);
-        }
+        throw new ArgumentError(message);
       }
     } else {
       opcode = _WebSocketOpcode.TEXT;
@@ -484,9 +481,8 @@ class _WebSocketOutgoingTransformer
           opcode,
           data,
           webSocket._serverSide,
-          false).forEach((e) {
-        _eventSink.add(e);
-      });
+          false)
+        .forEach((e) { _eventSink.add(e); });
 
   static Iterable<List<int>> createFrame(
       int opcode, List<int> data, bool serverSide, bool compressed) {
@@ -807,6 +803,12 @@ class WebSocketImpl extends Stream with _ServiceObject implements StreamSink {
   String get closeReason => _closeReason;
 
   void add(data) { _sink.add(data); }
+  void addUtf8Text(List<int> bytes) {
+    if (bytes is! List<int>) {
+      throw new ArgumentError.value(bytes, "bytes", "Is not a list of bytes");
+    }
+    _sink.add(new _EncodedString(bytes));
+  }
   void addError(error, [StackTrace stackTrace]) {
     _sink.addError(error, stackTrace);
   }
