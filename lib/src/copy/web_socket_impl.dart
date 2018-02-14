@@ -23,11 +23,6 @@ import 'io_sink.dart';
 import 'web_socket.dart';
 
 const String webSocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-const String _webSocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-const String _clientNoContextTakeover = "client_no_context_takeover";
-const String _serverNoContextTakeover = "server_no_context_takeover";
-const String _clientMaxWindowBits = "client_max_window_bits";
-const String _serverMaxWindowBits = "server_max_window_bits";
 
 final _random = new Random();
 
