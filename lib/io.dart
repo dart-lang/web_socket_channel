@@ -24,6 +24,7 @@ class IOWebSocketChannel extends StreamChannelMixin
   WebSocket _webSocket;
 
   String get protocol => _webSocket?.protocol;
+  int get readyState => _webSocket?.readyState;
   int get closeCode => _webSocket?.closeCode;
   String get closeReason => _webSocket?.closeReason;
 
