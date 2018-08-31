@@ -26,7 +26,7 @@ main() async {
 
   channel.stream.listen((message) {
     channel.sink.add("received!");
-    channel.close(status.goingAway);
+    channel.sink.close(status.goingAway);
   });
 }
 ```
