@@ -54,7 +54,7 @@ class WebSocketChannel extends StreamChannelMixin {
 
   /// Set the ping interval used by the underlying socket.
   ///
-  /// If pingInterval is non-null, it will enable ping/pong round trip 
+  /// If pingInterval is non-null, it will enable ping/pong round trip
   /// messages to verify connection. If no reply is received within interval
   /// duration, the web socket will be closed.
   set pingInterval(Duration interval) => _webSocket.pingInterval = interval;
