@@ -47,6 +47,18 @@ class WebSocketChannel extends StreamChannelMixin {
   /// Before the connection has been closed, this will be `null`.
   String get closeReason => _webSocket.closeReason;
 
+  /// Get the ping interval used by the underlying socket.
+  ///
+  /// Retrieves the current duration of the pingInterval.
+  Duration get pingInterval => _webSocket.pingInterval;
+
+  /// Set the ping interval used by the underlying socket.
+  ///
+  /// If pingInterval is non-null, it will enable ping/pong round trip 
+  /// messages to verify connection. If no reply is received within interval
+  /// duration, the web socket will be closed.
+  set pingInterval(Duration interval) => _webSocket.pingInterval = interval;
+    
   Stream get stream => StreamView(_webSocket);
 
   /// The sink for sending values to the other endpoint.
