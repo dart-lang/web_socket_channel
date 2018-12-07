@@ -58,7 +58,7 @@ class WebSocketChannel extends StreamChannelMixin {
   /// messages to verify connection. If no reply is received within interval
   /// duration, the web socket will be closed.
   set pingInterval(Duration interval) => _webSocket.pingInterval = interval;
-    
+
   Stream get stream => StreamView(_webSocket);
 
   /// The sink for sending values to the other endpoint.

@@ -28,6 +28,9 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   String get closeReason => _closeReason;
   String _closeReason;
 
+  Duration get pingInterval => null;
+  set pingInterval(Duration interval) => null;
+
   /// The number of bytes of data that have been queued but not yet transmitted
   /// to the network.
   int get bufferedAmount => _webSocket.bufferedAmount;

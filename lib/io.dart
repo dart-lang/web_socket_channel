@@ -27,6 +27,9 @@ class IOWebSocketChannel extends StreamChannelMixin
   int get closeCode => _webSocket?.closeCode;
   String get closeReason => _webSocket?.closeReason;
 
+  Duration get pingInterval => _webSocket.pingInterval;
+  set pingInterval(Duration interval) => _webSocket.pingInterval = interval;
+
   final Stream stream;
   final WebSocketSink sink;
 
