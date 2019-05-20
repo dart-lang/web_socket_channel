@@ -1,3 +1,8 @@
+## 1.0.13
+
+* Update `BytesBuilder.takeBytes()` and `BytesBuilder.toBytes()`
+  to declare a return value of `Uint8List` rather than `List<int>`.
+
 ## 1.0.12
 
 * Allow `stream_channel` version 2.x
