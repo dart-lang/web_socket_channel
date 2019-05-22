@@ -1,7 +1,6 @@
 ## 1.0.13
 
-* Update `BytesBuilder.takeBytes()` and `BytesBuilder.toBytes()`
-  to declare a return value of `Uint8List` rather than `List<int>`.
+* Internal changes for consistency with the Dart SDK.
 
 ## 1.0.12
 
