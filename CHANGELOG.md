@@ -3,6 +3,10 @@
 * Add a WebSocketChannel.ready field that indicates if connection with ws has been established
 * Add a timeout parameter for a WebSocket connection
 
+## 1.0.14
+
+* Updates to handle `Socket implements Stream<Uint8List>`
+
 ## 1.0.13
 
 * Internal changes for consistency with the Dart SDK.
