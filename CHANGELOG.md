@@ -1,3 +1,29 @@
+## 1.0.14
+
+* Updates to handle `Socket implements Stream<Uint8List>`
+
+## 1.0.13
+
+* Internal changes for consistency with the Dart SDK.
+
+## 1.0.12
+
+* Allow `stream_channel` version 2.x
+
+## 1.0.11
+
+* Fixed description in pubspec.
+
+* Fixed lints in README.md.
+
+## 1.0.10
+
+* Fixed links in README.md.
+
+* Added an example.
+
+* Fixed analysis lints that affected package score.
+
 ## 1.0.9
 
 * Set max SDK version to `<3.0.0`.
