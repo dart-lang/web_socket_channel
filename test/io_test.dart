@@ -105,10 +105,12 @@ void main() {
 
     server = await HttpServer.bind('localhost', 0);
     server.listen((request) {
-      expect(WebSocketTransformer.upgrade(request, protocolSelector: selector), throwsException);
+      expect(WebSocketTransformer.upgrade(request, protocolSelector: selector),
+          throwsException);
     });
 
-    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}", protocols: [failedProtocol]);
+    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}",
+        protocols: [failedProtocol]);
     expect(channel.stream.toList(),
         throwsA(TypeMatcher<WebSocketChannelException>()));
   });
@@ -119,12 +121,14 @@ void main() {
 
     server = await HttpServer.bind('localhost', 0);
     server.listen((request) async {
-      var webSocket = await WebSocketTransformer.upgrade(request, protocolSelector: selector);
+      var webSocket = await WebSocketTransformer.upgrade(request,
+          protocolSelector: selector);
       expect(webSocket.protocol, passedProtocol);
       await webSocket.close();
     });
 
-    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}", protocols: [passedProtocol]);
+    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}",
+        protocols: [passedProtocol]);
     await channel.stream.listen(null).asFuture();
     expect(channel.protocol, passedProtocol);
   });
