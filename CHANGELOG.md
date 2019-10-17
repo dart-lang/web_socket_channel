@@ -1,3 +1,8 @@
+## UNRELEASED
+
+* Add a WebSocketChannel.ready field that indicates if connection with ws has been established
+* Add a timeout parameter for a WebSocket connection
+
 ## 1.1.0
 
 * Add `WebSocketChannel.connect` factory constructor supporting platform
