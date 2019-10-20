@@ -66,7 +66,8 @@ class IOWebSocketChannel extends StreamChannelMixin
       Duration timeout}) {
     var channel;
     var sinkCompleter = WebSocketSinkCompleter();
-    var webSocketFuture = WebSocket.connect(url.toString(), headers: headers, protocols: protocols);
+    var webSocketFuture = WebSocket.connect(url.toString(),
+        headers: headers, protocols: protocols);
     if (timeout != null) {
       webSocketFuture = webSocketFuture.timeout(timeout);
     }
