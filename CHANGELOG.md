@@ -2,6 +2,8 @@
 
 * Added a Future `ready` property to `IOWebSocketChannel`, which completes when the connection is established
 
+* Added a `timeout` parameter to the `WebSocketChannel.connect` factory, which controls the timeout of the WebSocket Future.
+
 ## 1.1.0
 
 * Add `WebSocketChannel.connect` factory constructor supporting platform
