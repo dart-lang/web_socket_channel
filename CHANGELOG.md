@@ -1,7 +1,6 @@
-## UNRELEASED
+## 1.1.1
 
-* Add a WebSocketChannel.ready field that indicates if connection with ws has been established
-* Add a timeout parameter for a WebSocket connection
+* Added a Future `ready` property to `IOWebSocketChannel`, which completes when the connection is established
 
 ## 1.1.0
 

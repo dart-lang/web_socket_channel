@@ -84,15 +84,19 @@ directly to a `ws://` or `wss://` URL, in which case
 
 [IOWebSocketChannel.connect]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel.io/IOWebSocketChannel/IOWebSocketChannel.connect.html
 
+The [`ready` property] is a Future which can be used to only execute code once the connection of the underyling WebSocket is established.
+
 ```dart
 import 'package:web_socket_channel/io.dart';
 
 main() async {
   var channel = IOWebSocketChannel.connect("ws://localhost:8181");
-  channel.sink.add("connected!");
-  channel.stream.listen((message) {
-    // ...
-  });
+  channel.ready.then((_) {
+    channel.sink.add("connected!");
+    channel.stream.listen((message) {
+      // ...
+    });
+  })
 }
 ```
 
