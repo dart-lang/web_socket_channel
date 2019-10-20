@@ -29,9 +29,7 @@ class IOWebSocketChannel extends StreamChannelMixin
 
   /// Future indicating if the connection has been established.
   /// It completes on successful connection to the websocket.
-  Future get ready {
-    return _readyCompleter?.future;
-  }
+  Future<void> get ready => _readyCompleter?.future;
 
   /// Completer for [ready].
   final Completer _readyCompleter;
@@ -72,11 +70,10 @@ class IOWebSocketChannel extends StreamChannelMixin
     if (timeout != null) {
       webSocketFuture = webSocketFuture.timeout(timeout);
     }
-
     var stream = StreamCompleter.fromFuture(webSocketFuture.then((webSocket) {
       webSocket.pingInterval = pingInterval;
       channel._webSocket = webSocket;
-      channel._readyCompleter.complete(null);
+      channel._readyCompleter.complete();
       sinkCompleter.setDestinationSink(_IOWebSocketSink(webSocket));
       return webSocket;
     }).catchError((error) => throw WebSocketChannelException.from(error)));
@@ -91,7 +88,7 @@ class IOWebSocketChannel extends StreamChannelMixin
         stream = socket.handleError(
             (error) => throw WebSocketChannelException.from(error)),
         sink = _IOWebSocketSink(socket),
-        _readyCompleter = Completer.sync();
+        _readyCompleter = Completer()..complete();
 
   /// Creates a channel without a socket.
   ///
@@ -101,7 +98,7 @@ class IOWebSocketChannel extends StreamChannelMixin
       : _webSocket = null,
         stream = stream.handleError(
             (error) => throw WebSocketChannelException.from(error)),
-        _readyCompleter = Completer.sync();
+        _readyCompleter = Completer();
 }
 
 /// A [WebSocketSink] that forwards [close] calls to a `dart:io` [WebSocket].
