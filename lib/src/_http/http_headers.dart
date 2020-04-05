@@ -4,7 +4,7 @@
 
 // @dart = 2.6
 
-part of my._http;
+part of my_http;
 
 class _HttpHeaders implements HttpHeaders {
   final Map<String, List<String>> _headers;

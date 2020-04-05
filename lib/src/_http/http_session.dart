@@ -4,7 +4,7 @@
 
 // @dart = 2.6
 
-part of my._http;
+part of my_http;
 
 const String _DART_SESSION_ID = "DARTSESSID";
 

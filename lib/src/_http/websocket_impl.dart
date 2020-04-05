@@ -4,7 +4,7 @@
 
 // @dart = 2.6
 
-part of my._http;
+part of my_http;
 
 const String _webSocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 const String _clientNoContextTakeover = "client_no_context_takeover";

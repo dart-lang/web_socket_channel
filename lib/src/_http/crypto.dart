@@ -4,7 +4,7 @@
 
 // @dart = 2.6
 
-part of my._http;
+part of my_http;
 
 class _CryptoUtils {
   static const int PAD = 61; // '='

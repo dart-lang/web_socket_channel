@@ -4,7 +4,7 @@
 
 // @dart = 2.6
 
-library my._http;
+library my_http;
 
 import 'dart:async';
 import 'dart:collection'
