@@ -12,8 +12,6 @@
 // This is up-to-date as of sdk revision
 // 365f7b5a8b6ef900a5ee23913b7203569b81b175.
 
-// ignore_for_file: unused_field
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -381,11 +379,13 @@ class _WebSocketProtocolTransformer extends StreamTransformerBase<List<int>,
 
 class _WebSocketPing {
   final List<int> payload;
+
   _WebSocketPing([this.payload]);
 }
 
 class _WebSocketPong {
   final List<int> payload;
+
   _WebSocketPong([this.payload]);
 }
 
@@ -798,7 +798,9 @@ class WebSocketImpl extends Stream with _ServiceObject implements StreamSink {
   int get readyState => _readyState;
 
   String get extensions => null;
+
   int get closeCode => _closeCode;
+
   String get closeReason => _closeReason;
 
   @override
@@ -813,6 +815,7 @@ class WebSocketImpl extends Stream with _ServiceObject implements StreamSink {
 
   @override
   Future addStream(Stream stream) => _sink.addStream(stream);
+
   @override
   Future get done => _sink.done;
 
@@ -881,12 +884,13 @@ int _nextServiceId = 1;
 // TODO(ajohnsen): Use other way of getting a uniq id.
 abstract class _ServiceObject {
   int __serviceId = 0;
+
   int get _serviceId {
     if (__serviceId == 0) __serviceId = _nextServiceId++;
     return __serviceId;
   }
 
-  // The _toJSON, _servicePath, _serviceTypePath, _serviceTypeName, and
-  // _serviceType methods have been deleted for http_parser. The methods were
-  // unused in WebSocket code and produced warnings.
+// The _toJSON, _servicePath, _serviceTypePath, _serviceTypeName, and
+// _serviceType methods have been deleted for http_parser. The methods were
+// unused in WebSocket code and produced warnings.
 }

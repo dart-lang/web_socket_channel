@@ -12,6 +12,7 @@ import 'package:stream_channel/stream_channel.dart';
 
 import 'src/channel.dart';
 import 'src/exception.dart';
+import 'src/_http/http.dart';
 import 'src/sink_completer.dart';
 
 /// A [WebSocketChannel] that communicates using a `dart:io` [WebSocket].
@@ -56,11 +57,13 @@ class IOWebSocketChannel extends StreamChannelMixin
   factory IOWebSocketChannel.connect(url,
       {Iterable<String> protocols,
       Map<String, dynamic> headers,
-      Duration pingInterval}) {
+      Duration pingInterval,
+      // ignore: use_function_type_syntax_for_parameters
+      bool badCertificateCallback(X509Certificate cert, String host, int port)}) {
     var channel;
     var sinkCompleter = WebSocketSinkCompleter();
     var stream = StreamCompleter.fromFuture(WebSocket.connect(url.toString(),
-            headers: headers, protocols: protocols)
+            headers: headers, protocols: protocols, badCertificateCallback: badCertificateCallback)
         .then((webSocket) {
       webSocket.pingInterval = pingInterval;
       channel._webSocket = webSocket;
