@@ -1,4 +1,7 @@
-## 1.1.1
+## 1.2.0-dev
+
+* Add `protocols` argument to `WebSocketChannel.connect`. See the docs for
+  `WebSocket.connet`.
 
 * Added a Future `ready` property to `IOWebSocketChannel`, which completes when the connection is established
 
