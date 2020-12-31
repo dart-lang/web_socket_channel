@@ -28,6 +28,10 @@ class IOWebSocketChannel extends StreamChannelMixin
   @override
   String get closeReason => _webSocket?.closeReason;
 
+  set pingInterval(Duration _pingInterval) {
+    _webSocket?.pingInterval = _pingInterval;
+  }
+
   @override
   final Stream stream;
   @override
