@@ -55,7 +55,8 @@ jobs:
         sdk: [dev]
         version: [latest]
         include:
-          - sdk: stable
+          - os: ubuntu-latest
+            sdk: stable
             version: 2.10.0
     steps:
       - uses: actions/checkout@v2
