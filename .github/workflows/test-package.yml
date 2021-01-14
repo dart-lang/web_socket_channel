@@ -50,6 +50,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Add macos-latest and/or windows-latest if relevant for this package.
+        os: [ubuntu-latest]
         sdk: [dev]
         version: [latest]
         include:
