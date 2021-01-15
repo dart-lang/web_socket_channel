@@ -2,14 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
 void main() async {
-  final channel = await IOWebSocketChannel.connect('ws://localhost:1234');
+  final channel = await IOWebSocketChannel.connect('wss://echo.websocket.org',
+      badCertificateCallback: (X509Certificate cert, String host, int port) =>
+          false);
 
   channel.stream.listen((message) {
-    channel.sink.add('received!');
-    channel.sink.close(status.goingAway);
+    print('RECEIVED: $message');
   });
+  channel.sink.add('hello WebSocket !');
 }
