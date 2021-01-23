@@ -1,9 +1,9 @@
 // Copyright (c) 2016, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
-
 @TestOn('vm')
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:test/test.dart';
@@ -31,6 +31,8 @@ void main() {
 
     var webSocket = await WebSocket.connect('ws://localhost:${server.port}');
     var channel = IOWebSocketChannel(webSocket);
+
+    expect(channel.ready, completes);
 
     var n = 0;
     channel.stream.listen((message) {
@@ -60,7 +62,10 @@ void main() {
     });
 
     var channel = IOWebSocketChannel.connect('ws://localhost:${server.port}');
-    channel.sink.add('ping');
+
+    expect(channel.ready, completes);
+
+    channel.sink.add("ping");
 
     channel.stream.listen(
         expectAsync1((message) {
@@ -105,6 +110,7 @@ void main() {
     });
 
     var channel = IOWebSocketChannel.connect('ws://localhost:${server.port}');
+    expect(channel.ready, completes);
     await channel.sink.close(5678, 'raisin');
   });
 
@@ -154,5 +160,47 @@ void main() {
         protocols: [passedProtocol]);
     await channel.stream.drain();
     expect(channel.protocol, passedProtocol);
+  });
+
+  test(".connects with a timeout parameters specified", () async {
+    server = await HttpServer.bind("localhost", 0);
+    server.transform(WebSocketTransformer()).listen((webSocket) {
+      expect(() async {
+        var channel = IOWebSocketChannel(webSocket);
+        await channel.stream.drain();
+        expect(channel.closeCode, equals(5678));
+        expect(channel.closeReason, equals("raisin"));
+      }(), completes);
+    });
+
+    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}",
+        timeout: Duration(milliseconds: 1000));
+    expect(channel.ready, completes);
+    await channel.sink.close(5678, "raisin");
+  });
+
+  test(".respects timeout parameter when trying to connect", () async {
+    server = await HttpServer.bind("localhost", 0);
+    server
+        .transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
+            handleData: (data, sink) {
+          // Wait before we handle this request, to give the timeout a chance to
+          // kick in. We still want to make sure that we handle the request
+          // afterwards to not have false positives with the timeout
+          Timer(Duration(milliseconds: 800), () {
+            sink.add(data);
+          });
+        }))
+        .transform(WebSocketTransformer())
+        .listen((webSocket) {
+          var channel = IOWebSocketChannel(webSocket);
+          channel.stream.drain();
+        });
+
+    var channel = IOWebSocketChannel.connect("ws://localhost:${server.port}",
+        timeout: Duration(milliseconds: 500));
+    expect(channel.ready, doesNotComplete);
+    expect(channel.stream.drain(),
+        throwsA(TypeMatcher<WebSocketChannelException>()));
   });
 }
