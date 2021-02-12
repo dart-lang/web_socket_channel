@@ -14,7 +14,7 @@ env:
 
 jobs:
   # Check code formatting and static analysis on a single OS (linux)
-  # against Dart dev and stable.
+  # against Dart dev.
   analyze:
     runs-on: ubuntu-latest
     strategy:
