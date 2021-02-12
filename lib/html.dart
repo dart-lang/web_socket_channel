@@ -51,8 +51,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
       StreamChannelController(sync: true, allowForeignErrors: false);
 
   @override
-  WebSocketSink get sink => _sink;
-  late final WebSocketSink _sink;
+  late final WebSocketSink sink = _HtmlWebSocketSink(this);
 
   /// Creates a new WebSocket connection.
   ///
@@ -72,8 +71,6 @@ class HtmlWebSocketChannel extends StreamChannelMixin
 
   /// Creates a channel wrapping [_webSocket].
   HtmlWebSocketChannel(this._webSocket) {
-    _sink = _HtmlWebSocketSink(this);
-
     if (_webSocket.readyState == WebSocket.OPEN) {
       _listen();
     } else {
