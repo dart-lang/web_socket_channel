@@ -3,10 +3,10 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:stream_channel/stream_channel.dart';
+import 'package:universal_io/io.dart';
 
 import 'src/channel.dart';
 import 'src/exception.dart';
