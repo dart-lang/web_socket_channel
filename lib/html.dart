@@ -53,6 +53,12 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   @override
   late final WebSocketSink sink = _HtmlWebSocketSink(this);
 
+  /// The underlying [WebSocket], if this channel has connected.
+  ///
+  /// If the future returned from [WebSocket.connect] has not yet completed, or
+  /// completed as an error, this will be null.
+  WebSocket? get innerWebSocket => _webSocket;
+
   /// Creates a new WebSocket connection.
   ///
   /// Connects to [url] using [new WebSocket] and returns a channel that can be
