@@ -1,4 +1,4 @@
-## 2.2.0-dev
+## 2.2.0
 
 - Add `HtmlWebSocketChannel.innerWebSocket` getter to access features not exposed
   through the shared `WebSocketChannel` interface.
