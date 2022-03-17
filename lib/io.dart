@@ -55,6 +55,10 @@ class IOWebSocketChannel extends StreamChannelMixin
   /// [pingInterval]. It defaults to `null`, indicating that ping messages are
   /// disabled.
   ///
+  /// [HttpClient] could be used to set a custom function
+  /// [HttpClient.badCertificateCallback] to test system
+  ///  on a self-signed SSL certificates
+  ///
   /// If there's an error connecting, the channel's stream emits a
   /// [WebSocketChannelException] wrapping that error and then closes.
   factory IOWebSocketChannel.connect(Object url,
