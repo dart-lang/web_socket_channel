@@ -57,17 +57,20 @@ class IOWebSocketChannel extends StreamChannelMixin
   ///
   /// If there's an error connecting, the channel's stream emits a
   /// [WebSocketChannelException] wrapping that error and then closes.
-  factory IOWebSocketChannel.connect(
-    Object url, {
-    Iterable<String>? protocols,
-    Map<String, dynamic>? headers,
-    Duration? pingInterval,
-  }) {
+  factory IOWebSocketChannel.connect(Object url,
+      {Iterable<String>? protocols,
+      Map<String, dynamic>? headers,
+      Duration? pingInterval,
+      HttpClient? customHttpClient}) {
     late IOWebSocketChannel channel;
     final sinkCompleter = WebSocketSinkCompleter();
     final stream = StreamCompleter.fromFuture(
-      WebSocket.connect(url.toString(), headers: headers, protocols: protocols)
-          .then((webSocket) {
+      WebSocket.connect(
+        url.toString(),
+        headers: headers,
+        protocols: protocols,
+        customClient: customHttpClient,
+      ).then((webSocket) {
         webSocket.pingInterval = pingInterval;
         channel._webSocket = webSocket;
         sinkCompleter.setDestinationSink(_IOWebSocketSink(webSocket));
