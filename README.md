@@ -20,26 +20,18 @@ import this library with the prefix `status`.
 [status]: https://pub.dev/documentation/web_socket_channel/latest/status/status-library.html
 
 ```dart
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 main() async {
   final wsUrl = Uri.parse('ws://localhost:1234')
-  
-  var channel = IOWebSocketChannel.connect(wsUrl);
+  var channel = WebSocketChannel.connect(wsUrl);
 
   channel.stream.listen((message) {
     channel.sink.add('received!');
     channel.sink.close(status.goingAway);
   });
 }
-```
-
-For applications making use of the web platform, use the `WebSocketChannel` class instead as follows:
-```dart
-import 'package:web_socket_channel/web_socket_channel.dart';
-// ...
-channel = WebSocketChannel.connect(wsUrl);
 ```
 
 ## `WebSocketChannel`
