@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 @TestOn('vm')
+import 'dart:async';
 import 'dart:io';
 
 import 'package:test/test.dart';
@@ -49,6 +50,7 @@ void main() {
 
   test('.connect communicates immediately', () async {
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.transform(WebSocketTransformer()).listen((WebSocket webSocket) {
       final channel = IOWebSocketChannel(webSocket);
       channel.stream.listen((request) {
@@ -74,6 +76,7 @@ void main() {
   test('.connect communicates immediately using platform independent api',
       () async {
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.transform(WebSocketTransformer()).listen((WebSocket webSocket) {
       final channel = IOWebSocketChannel(webSocket);
       channel.stream.listen((request) {
@@ -99,6 +102,7 @@ void main() {
 
   test('.connect with an immediate call to close', () async {
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.transform(WebSocketTransformer()).listen((WebSocket webSocket) {
       expect(() async {
         final channel = IOWebSocketChannel(webSocket);
@@ -118,6 +122,7 @@ void main() {
   test('.connect wraps a connection error in WebSocketChannelException',
       () async {
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.listen((request) {
       request.response.statusCode = 404;
       request.response.close();
@@ -133,6 +138,7 @@ void main() {
     String selector(List<String> receivedProtocols) => passedProtocol;
 
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.listen((HttpRequest request) {
       expect(
         WebSocketTransformer.upgrade(request, protocolSelector: selector),
@@ -155,6 +161,7 @@ void main() {
     String selector(List<String> receivedProtocols) => passedProtocol;
 
     server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
     server.listen((HttpRequest request) async {
       final webSocket = await WebSocketTransformer.upgrade(
         request,
@@ -171,5 +178,53 @@ void main() {
 
     await channel.stream.drain();
     expect(channel.protocol, passedProtocol);
+  });
+
+  test('.connects with a timeout parameters specified', () async {
+    server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
+    server.transform(WebSocketTransformer()).listen((webSocket) {
+      expect(() async {
+        final channel = IOWebSocketChannel(webSocket);
+        await channel.stream.drain();
+        expect(channel.closeCode, equals(5678));
+        expect(channel.closeReason, equals('raisin'));
+      }(), completes);
+    });
+
+    final channel = IOWebSocketChannel.connect(
+      'ws://localhost:${server.port}',
+      connectTimeout: const Duration(milliseconds: 1000),
+    );
+    expect(channel.ready, completes);
+    await channel.sink.close(5678, 'raisin');
+  });
+
+  test('.respects timeout parameter when trying to connect', () async {
+    server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
+    server
+        .transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
+            handleData: (data, sink) {
+          // Wait before we handle this request, to give the timeout a chance to
+          // kick in. We still want to make sure that we handle the request
+          // afterwards to not have false positives with the timeout
+          Timer(const Duration(milliseconds: 800), () {
+            sink.add(data);
+          });
+        }))
+        .transform(WebSocketTransformer())
+        .listen((webSocket) {
+          final channel = IOWebSocketChannel(webSocket);
+          channel.stream.drain();
+        });
+
+    final channel = IOWebSocketChannel.connect(
+      'ws://localhost:${server.port}',
+      connectTimeout: const Duration(milliseconds: 500),
+    );
+    expect(channel.ready, doesNotComplete);
+    expect(channel.stream.drain(),
+        throwsA(const TypeMatcher<WebSocketChannelException>()));
   });
 }
