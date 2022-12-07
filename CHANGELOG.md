@@ -1,6 +1,10 @@
 ## 2.2.1-dev
 
 - Use platform agnostic code in README example.
+- Added a Future `ready` property to `WebSocketChannel`, which completes when 
+  the connection is established
+- Added a `connectTimeout` parameter to the `IOWebSocketChannel.connect` factory, 
+  which controls the timeout of the WebSocket Future.
 
 ## 2.2.0
 
