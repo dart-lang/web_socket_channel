@@ -28,6 +28,8 @@ void main() {
     final webSocket = await WebSocket.connect('ws://localhost:${server.port}');
     final channel = IOWebSocketChannel(webSocket);
 
+    expect(channel.ready, completes);
+
     var n = 0;
     channel.stream.listen((message) {
       if (n == 0) {
@@ -56,6 +58,9 @@ void main() {
     });
 
     final channel = IOWebSocketChannel.connect('ws://localhost:${server.port}');
+
+    expect(channel.ready, completes);
+
     channel.sink.add('ping');
 
     channel.stream.listen(
@@ -79,6 +84,9 @@ void main() {
 
     final channel =
         WebSocketChannel.connect(Uri.parse('ws://localhost:${server.port}'));
+
+    expect(channel.ready, completes);
+
     channel.sink.add('ping');
 
     channel.stream.listen(
@@ -101,6 +109,9 @@ void main() {
     });
 
     final channel = IOWebSocketChannel.connect('ws://localhost:${server.port}');
+
+    expect(channel.ready, completes);
+
     await channel.sink.close(5678, 'raisin');
   });
 
@@ -155,6 +166,9 @@ void main() {
 
     final channel = IOWebSocketChannel.connect('ws://localhost:${server.port}',
         protocols: [passedProtocol]);
+
+    expect(channel.ready, completes);
+
     await channel.stream.drain();
     expect(channel.protocol, passedProtocol);
   });

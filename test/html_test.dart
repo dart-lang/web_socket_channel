@@ -37,6 +37,9 @@ void main() {
   test('communicates using an existing WebSocket', () async {
     final webSocket = WebSocket('ws://localhost:$port');
     final channel = HtmlWebSocketChannel(webSocket);
+
+    expect(channel.ready, completes);
+
     addTearDown(channel.sink.close);
 
     final queue = StreamQueue(channel.stream);
@@ -59,6 +62,9 @@ void main() {
     await webSocket.onOpen.first;
 
     final channel = HtmlWebSocketChannel(webSocket);
+
+    expect(channel.ready, completes);
+
     addTearDown(channel.sink.close);
 
     final queue = StreamQueue(channel.stream);
@@ -68,6 +74,9 @@ void main() {
 
   test('.connect defaults to binary lists', () async {
     final channel = HtmlWebSocketChannel.connect('ws://localhost:$port');
+
+    expect(channel.ready, completes);
+
     addTearDown(channel.sink.close);
 
     final queue = StreamQueue(channel.stream);
@@ -81,6 +90,9 @@ void main() {
   test('.connect defaults to binary lists using platform independent api',
       () async {
     final channel = WebSocketChannel.connect(Uri.parse('ws://localhost:$port'));
+
+    expect(channel.ready, completes);
+
     addTearDown(channel.sink.close);
 
     final queue = StreamQueue(channel.stream);
@@ -94,6 +106,9 @@ void main() {
   test('.connect can use blobs', () async {
     final channel = HtmlWebSocketChannel.connect('ws://localhost:$port',
         binaryType: BinaryType.blob);
+
+    expect(channel.ready, completes);
+
     addTearDown(channel.sink.close);
 
     final queue = StreamQueue(channel.stream);
