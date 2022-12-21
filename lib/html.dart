@@ -48,8 +48,6 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   /// Completer for [ready].
   late Completer<void> _readyCompleter;
 
-  /// Future indicating if the connection has been established.
-  /// It completes on successful connection to the websocket.
   @override
   Future<void> get ready => _readyCompleter.future;
 

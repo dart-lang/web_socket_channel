@@ -223,7 +223,13 @@ void main() {
       'ws://localhost:${server.port}',
       connectTimeout: const Duration(milliseconds: 500),
     );
-    expect(channel.ready, doesNotComplete);
+
+    try {
+      await channel.ready;
+      fail('`connectTimeout` parameter does not work.');
+    } catch (e) {
+      expect(e, isA<TimeoutException>());
+    }
     expect(channel.stream.drain(),
         throwsA(const TypeMatcher<WebSocketChannelException>()));
   });

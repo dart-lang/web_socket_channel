@@ -39,8 +39,6 @@ class IOWebSocketChannel extends StreamChannelMixin
   /// Completer for [ready].
   final Completer<void> _readyCompleter;
 
-  /// Future indicating if the connection has been established.
-  /// It completes on successful connection to the websocket.
   @override
   Future<void> get ready => _readyCompleter.future;
 
@@ -63,9 +61,10 @@ class IOWebSocketChannel extends StreamChannelMixin
   /// When a ping signal is sent, the pong message must be received within
   /// [pingInterval]. It defaults to `null`, indicating that ping messages are
   /// disabled.
-  /// [connectTimeout] determines how long the [WebSocket.connect] waits until
-  /// it throws an error. It defaults to `null`, indicating that the connection
-  /// will never throw an error caused by a server not responding.
+  ///
+  /// [connectTimeout] determines how long to wait for [WebSocket.connect]
+  /// before throwing a [TimeoutException]. If connectTimeout is null then the
+  /// connection process will never time-out.
   ///
   /// If there's an error connecting, the channel's stream emits a
   /// [WebSocketChannelException] wrapping that error and then closes.
