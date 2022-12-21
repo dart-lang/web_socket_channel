@@ -72,6 +72,14 @@ void main() {
     expect(await queue.next, equals('foo'));
   });
 
+  test('communicates using an existing closed WebSocket', () async {
+    final webSocket = WebSocket('ws://localhost:$port');
+    webSocket.close();
+
+    final channel = HtmlWebSocketChannel(webSocket);
+    expect(channel.ready, throwsA(isA<WebSocketChannelException>()));
+  });
+
   test('.connect defaults to binary lists', () async {
     final channel = HtmlWebSocketChannel.connect('ws://localhost:$port');
 
@@ -141,6 +149,7 @@ void main() {
     // invalid.
     final channel = HtmlWebSocketChannel.connect(
         'ws://localhost:${await serverChannel.stream.first}');
+    expect(channel.ready, throwsA(isA<WebSocketChannelException>()));
     expect(channel.stream.toList(), throwsA(isA<WebSocketChannelException>()));
   });
 }

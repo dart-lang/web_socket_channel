@@ -129,6 +129,7 @@ void main() {
     });
 
     final channel = IOWebSocketChannel.connect('ws://localhost:${server.port}');
+    expect(channel.ready, throwsA(isA<WebSocketException>()));
     expect(channel.stream.drain(), throwsA(isA<WebSocketChannelException>()));
   });
 
@@ -150,6 +151,7 @@ void main() {
       'ws://localhost:${server.port}',
       protocols: [failedProtocol],
     );
+    expect(channel.ready, throwsA(isA<WebSocketException>()));
     expect(
       channel.stream.drain(),
       throwsA(isA<WebSocketChannelException>()),
