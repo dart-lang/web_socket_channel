@@ -72,6 +72,16 @@ void main() {
     expect(await queue.next, equals('foo'));
   });
 
+  test('communicates using an connecting WebSocket', () async {
+    final webSocket = WebSocket('ws://localhost:$port');
+
+    final channel = HtmlWebSocketChannel(webSocket);
+
+    expect(channel.ready, completes);
+
+    addTearDown(channel.sink.close);
+  });
+
   test('communicates using an existing closed WebSocket', () async {
     final webSocket = WebSocket('ws://localhost:$port');
     webSocket.close();

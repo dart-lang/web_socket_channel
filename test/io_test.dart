@@ -226,13 +226,7 @@ void main() {
       connectTimeout: const Duration(milliseconds: 500),
     );
 
-    try {
-      await channel.ready;
-      fail('`connectTimeout` parameter does not work.');
-    } catch (e) {
-      expect(e, isA<TimeoutException>());
-    }
-    expect(channel.stream.drain(),
-        throwsA(const TypeMatcher<WebSocketChannelException>()));
+    expect(channel.ready, throwsA(isA<TimeoutException>()));
+    expect(channel.stream.drain(), throwsA(isA<WebSocketChannelException>()));
   });
 }
