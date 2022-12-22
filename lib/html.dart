@@ -83,7 +83,8 @@ class HtmlWebSocketChannel extends StreamChannelMixin
       _readyCompleter.complete();
       _listen();
     } else {
-      if (innerWebSocket.readyState != WebSocket.CONNECTING) {
+      if (innerWebSocket.readyState == WebSocket.CLOSING ||
+          innerWebSocket.readyState == WebSocket.CLOSED) {
         _readyCompleter.completeError(WebSocketChannelException(
             'WebSocket state error: ${innerWebSocket.readyState}'));
       }
