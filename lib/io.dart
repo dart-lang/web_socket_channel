@@ -32,8 +32,15 @@ class IOWebSocketChannel extends StreamChannelMixin
 
   @override
   final Stream stream;
+
   @override
   final WebSocketSink sink;
+
+  /// Completer for [ready].
+  final Completer<void> _readyCompleter;
+
+  @override
+  Future<void> get ready => _readyCompleter.future;
 
   /// The underlying [WebSocket], if this channel has connected.
   ///
@@ -55,6 +62,7 @@ class IOWebSocketChannel extends StreamChannelMixin
   /// [pingInterval]. It defaults to `null`, indicating that ping messages are
   /// disabled.
   ///
+
   /// [HttpClient] could be used to set a custom function
   /// [HttpClient.badCertificateCallback] to test system
   ///  on a self-signed SSL certificates
@@ -82,8 +90,21 @@ class IOWebSocketChannel extends StreamChannelMixin
       }).catchError(
         (Object error) => throw WebSocketChannelException.from(error),
       ),
-    );
 
+    );
+    if (connectTimeout != null) {
+      future = future.timeout(connectTimeout);
+    }
+    final stream = StreamCompleter.fromFuture(future.then((webSocket) {
+      webSocket.pingInterval = pingInterval;
+      channel._webSocket = webSocket;
+      channel._readyCompleter.complete();
+      sinkCompleter.setDestinationSink(_IOWebSocketSink(webSocket));
+      return webSocket;
+    }).catchError((Object error, StackTrace stackTrace) {
+      channel._readyCompleter.completeError(error, stackTrace);
+      throw WebSocketChannelException.from(error);
+    }));
     return channel =
         IOWebSocketChannel._withoutSocket(stream, sinkCompleter.sink);
   }
@@ -93,7 +114,8 @@ class IOWebSocketChannel extends StreamChannelMixin
       : _webSocket = socket,
         stream = socket.handleError(
             (error) => throw WebSocketChannelException.from(error)),
-        sink = _IOWebSocketSink(socket);
+        sink = _IOWebSocketSink(socket),
+        _readyCompleter = Completer()..complete();
 
   /// Creates a channel without a socket.
   ///
@@ -102,7 +124,8 @@ class IOWebSocketChannel extends StreamChannelMixin
   IOWebSocketChannel._withoutSocket(Stream stream, this.sink)
       : _webSocket = null,
         stream = stream.handleError(
-            (error) => throw WebSocketChannelException.from(error));
+            (error) => throw WebSocketChannelException.from(error)),
+        _readyCompleter = Completer();
 }
 
 /// A [WebSocketSink] that forwards [close] calls to a `dart:io` [WebSocket].

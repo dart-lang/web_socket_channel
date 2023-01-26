@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/dart-lang/web_socket_channel/workflows/Dart%20CI/badge.svg)](https://github.com/dart-lang/web_socket_channel/actions?query=workflow%3A"Dart+CI"+branch%3Amaster)
+[![CI](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml/badge.svg?branch=master)](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml)
 
 The `web_socket_channel` package provides [`StreamChannel`][stream_channel]
 wrappers for WebSocket connections. It provides a cross-platform
@@ -20,11 +20,12 @@ import this library with the prefix `status`.
 [status]: https://pub.dev/documentation/web_socket_channel/latest/status/status-library.html
 
 ```dart
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 main() async {
-  var channel = IOWebSocketChannel.connect(Uri.parse('ws://localhost:1234'));
+  final wsUrl = Uri.parse('ws://localhost:1234')
+  var channel = WebSocketChannel.connect(wsUrl);
 
   channel.stream.listen((message) {
     channel.sink.add('received!');
