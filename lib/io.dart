@@ -62,25 +62,35 @@ class IOWebSocketChannel extends StreamChannelMixin
   /// [pingInterval]. It defaults to `null`, indicating that ping messages are
   /// disabled.
   ///
-  /// [connectTimeout] determines how long to wait for [WebSocket.connect]
-  /// before throwing a [TimeoutException]. If connectTimeout is null then the
-  /// connection process will never time-out.
+
+  /// [HttpClient] could be used to set a custom function
+  /// [HttpClient.badCertificateCallback] to test system
+  ///  on a self-signed SSL certificates
   ///
   /// If there's an error connecting, the channel's stream emits a
   /// [WebSocketChannelException] wrapping that error and then closes.
-  factory IOWebSocketChannel.connect(
-    Object url, {
-    Iterable<String>? protocols,
-    Map<String, dynamic>? headers,
-    Duration? pingInterval,
-    Duration? connectTimeout,
-  }) {
+  factory IOWebSocketChannel.connect(Object url,
+      {Iterable<String>? protocols,
+      Map<String, dynamic>? headers,
+      Duration? pingInterval,
+      HttpClient? customHttpClient}) {
     late IOWebSocketChannel channel;
     final sinkCompleter = WebSocketSinkCompleter();
-    var future = WebSocket.connect(
-      url.toString(),
-      headers: headers,
-      protocols: protocols,
+    final stream = StreamCompleter.fromFuture(
+      WebSocket.connect(
+        url.toString(),
+        headers: headers,
+        protocols: protocols,
+        customClient: customHttpClient,
+      ).then((webSocket) {
+        webSocket.pingInterval = pingInterval;
+        channel._webSocket = webSocket;
+        sinkCompleter.setDestinationSink(_IOWebSocketSink(webSocket));
+        return webSocket;
+      }).catchError(
+        (Object error) => throw WebSocketChannelException.from(error),
+      ),
+
     );
     if (connectTimeout != null) {
       future = future.timeout(connectTimeout);
