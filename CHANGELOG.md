@@ -1,3 +1,8 @@
+## 2.4.0
+- Adds a `customClient` parameter to the `IOWebSocketChannel.connect` factory,
+  which allows the user to provide a custom `HttpClient` instance to use for the
+  WebSocket connection
+
 ## 2.3.0
 
 - Added a Future `ready` property to `WebSocketChannel`, which completes when
