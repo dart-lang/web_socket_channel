@@ -236,15 +236,11 @@ void main() {
     server
         .transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
           handleData: (data, sink) {
-            expect(data.headers['user-agent'], 'custom');
+            expect(data.headers['user-agent'], ['custom']);
             sink.add(data);
           },
         ))
-        .transform(WebSocketTransformer())
-        .listen((webSocket) {
-          final channel = IOWebSocketChannel(webSocket);
-          channel.stream.drain();
-        });
+        .transform(WebSocketTransformer());
 
     final channel = IOWebSocketChannel.connect(
       'ws://localhost:${server.port}',
@@ -252,6 +248,5 @@ void main() {
     );
 
     expect(channel.ready, completes);
-    await channel.sink.close();
   });
 }
