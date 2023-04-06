@@ -74,7 +74,7 @@ class IOWebSocketChannel extends StreamChannelMixin
     Map<String, dynamic>? headers,
     Duration? pingInterval,
     Duration? connectTimeout,
-    HttpClient? customClient
+    HttpClient? customClient,
   }) {
     late IOWebSocketChannel channel;
     final sinkCompleter = WebSocketSinkCompleter();
