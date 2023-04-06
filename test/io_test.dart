@@ -229,4 +229,29 @@ void main() {
     expect(channel.ready, throwsA(isA<TimeoutException>()));
     expect(channel.stream.drain(), throwsA(isA<WebSocketChannelException>()));
   });
+
+  test('.custom client is passed through', () async {
+    server = await HttpServer.bind('localhost', 0);
+    addTearDown(server.close);
+    server
+        .transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
+          handleData: (data, sink) {
+            expect(data.headers['user-agent'], 'custom');
+            sink.add(data);
+          },
+        ))
+        .transform(WebSocketTransformer())
+        .listen((webSocket) {
+          final channel = IOWebSocketChannel(webSocket);
+          channel.stream.drain();
+        });
+
+    final channel = IOWebSocketChannel.connect(
+      'ws://localhost:${server.port}',
+      customClient: HttpClient()..userAgent = 'custom',
+    );
+
+    expect(channel.ready, completes);
+    await channel.sink.close();
+  });
 }
