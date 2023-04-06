@@ -233,14 +233,12 @@ void main() {
   test('.custom client is passed through', () async {
     server = await HttpServer.bind('localhost', 0);
     addTearDown(server.close);
-    server
-        .transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
-          handleData: (data, sink) {
-            expect(data.headers['user-agent'], ['custom']);
-            sink.add(data);
-          },
-        ))
-        .transform(WebSocketTransformer());
+    server.transform(StreamTransformer<HttpRequest, HttpRequest>.fromHandlers(
+      handleData: (data, sink) {
+        expect(data.headers['user-agent'], ['custom']);
+        sink.add(data);
+      },
+    )).transform(WebSocketTransformer());
 
     final channel = IOWebSocketChannel.connect(
       'ws://localhost:${server.port}',
