@@ -139,7 +139,7 @@ class WebSocketChannel extends StreamChannelMixin {
   /// not established synchronously.
   /// The [ready] future will complete after the channel is connected.
   /// If there are errors creating the connection the [ready] future will
-  /// complete as an error.
+  /// complete with an error.
   factory WebSocketChannel.connect(Uri uri, {Iterable<String>? protocols}) =>
       platform.connect(uri, protocols: protocols);
 }
