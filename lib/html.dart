@@ -75,9 +75,15 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   /// [BinaryType.blob], they're delivered as [Blob]s instead.
   HtmlWebSocketChannel.connect(Object url,
       {Iterable<String>? protocols, BinaryType? binaryType})
-      : this(WebSocket(url.toString(),
-            (protocols ?? <String>[]).toList().map((e) => e.toJS).toList().toJS)
-          ..binaryType = (binaryType ?? BinaryType.list).value);
+      : this(
+          WebSocket(
+            url.toString(),
+            (protocols?.toList() ?? const <String>[])
+                .map((e) => e.toJS)
+                .toList()
+                .toJS,
+          )..binaryType = (binaryType ?? BinaryType.list).value,
+        );
 
   /// Creates a channel wrapping [innerWebSocket].
   HtmlWebSocketChannel(this.innerWebSocket) {
@@ -124,11 +130,13 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   }
 
   void _innerListen(MessageEvent event) {
-    dynamic data = event.data;
-
-    if ((data as JSAny?).typeofEquals('object') &&
-        (data as JSObject).instanceOfString('ArrayBuffer')) {
-      data = (data as JSArrayBuffer).toDart.asUint8List();
+    final eventData = event.data;
+    Object? data;
+    if (eventData.typeofEquals('object') &&
+        (eventData as JSObject).instanceOfString('ArrayBuffer')) {
+      data = (eventData as JSArrayBuffer).toDart.asUint8List();
+    } else {
+      data = event.data;
     }
     _controller.local.sink.add(data);
   }
