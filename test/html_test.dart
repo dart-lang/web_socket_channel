@@ -89,7 +89,14 @@ void main() {
     webSocket.close();
 
     final channel = HtmlWebSocketChannel(webSocket);
-    expect(channel.ready, throwsA(isA<WebSocketChannelException>()));
+    await expectLater(
+      channel.ready,
+      throwsA(
+        isA<WebSocketChannelException>()
+            .having((p0) => p0.message, 'message', 'WebSocket state error: 2')
+            .having((p0) => p0.inner, 'inner', isNull),
+      ),
+    );
   });
 
   test('.connect defaults to binary lists', () async {

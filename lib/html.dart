@@ -102,7 +102,9 @@ class HtmlWebSocketChannel extends StreamChannelMixin
       // Unfortunately, the underlying WebSocket API doesn't expose any
       // specific information about the error itself.
       final error = WebSocketChannelException('WebSocket connection failed.');
-      _readyCompleter.completeError(error);
+      if (!_readyCompleter.isCompleted) {
+        _readyCompleter.completeError(error);
+      }
       _controller.local.sink.addError(error);
       _controller.local.sink.close();
     });
