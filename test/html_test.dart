@@ -3,6 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 @TestOn('browser')
+library;
+
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
