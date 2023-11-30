@@ -127,7 +127,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   }
 
   void _innerListen(MessageEvent event) {
-    final JSAny? eventData = event.data;
+    final eventData = event.data;
     Object? data;
     if (eventData.typeofEquals('object') &&
         (eventData as JSObject).instanceOfString('ArrayBuffer')) {
