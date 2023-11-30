@@ -133,7 +133,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
         (eventData as JSObject).instanceOfString('ArrayBuffer')) {
       data = (eventData as JSArrayBuffer).toDart.asUint8List();
     } else {
-      data = event.data.dartify();
+      data = eventData.dartify();
     }
     _controller.local.sink.add(data);
   }
