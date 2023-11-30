@@ -127,13 +127,13 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   }
 
   void _innerListen(MessageEvent event) {
-    final eventData = event.data;
+    final JSAny? eventData = event.data;
     Object? data;
     if (eventData.typeofEquals('object') &&
         (eventData as JSObject).instanceOfString('ArrayBuffer')) {
       data = (eventData as JSArrayBuffer).toDart.asUint8List();
     } else {
-      data = event.data;
+      data = event.data.dartify();
     }
     _controller.local.sink.add(data);
   }
