@@ -19,7 +19,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 extension on StreamChannel {
   /// Handles the WASM case where the runtime type is actually [double] instead
-  /// of the JS case where it's [int].
+  /// of the JS case where its [int].
   Future<int> get firstAsInt async => ((await stream.first) as num).toInt();
 }
 
