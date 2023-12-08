@@ -134,7 +134,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
       data = (eventData as JSString).toDart;
     } else if (eventData.typeofEquals('object') &&
         (eventData as JSObject).instanceOfString('ArrayBuffer')) {
-      data = (eventData as JSArrayBuffer).toDart;
+      data = (eventData as JSArrayBuffer).toDart.asUint8List();
     } else {
       // Blobs are passed directly.
       data = eventData;
