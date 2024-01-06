@@ -1,4 +1,10 @@
-## 2.4.2
+## 3.0.0
+
+- Update the underlying web implementation from using `dart:html` to using
+  `package:web` (this had also been published as `2.4.1`).
+
+## 2.4.2 (retracted)
+
 - Allow `web: '>=0.3.0 <0.5.0'`
 
 ## 2.4.1

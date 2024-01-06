@@ -13,50 +13,31 @@ env:
   PUB_ENVIRONMENT: bot.github
 
 jobs:
-  # Check code formatting and static analysis on a single OS (linux)
-  # against Dart dev.
-  analyze:
+  # Check formatting, static analysis, and run tests.
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        sdk: [dev]
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
-        with:
-          sdk: ${{ matrix.sdk }}
-      - id: install
-        name: Install dependencies
-        run: dart pub get
-      - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed .
-        if: always() && steps.install.outcome == 'success'
-      - name: Analyze code
-        run: dart analyze
-        if: always() && steps.install.outcome == 'success'
-
-  test:
-    needs: analyze
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        sdk: [3.2.0, dev]
+        sdk: [3.2.0, stable, dev]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: ${{ matrix.sdk }}
-      - id: install
-        name: Install dependencies
-        run: dart pub get
-      - name: Run VM tests
-        run: dart test --platform vm
-        if: always() && steps.install.outcome == 'success'
-      - name: Run Chrome tests
-        run: dart test --platform chrome
-        if: always() && steps.install.outcome == 'success'
-      - name: Run Chrome tests - wasm
-        run: dart test --platform chrome --compiler dart2wasm
-        if: always() && steps.install.outcome == 'success' && matrix.sdk == 'dev'
+      - run: dart pub get
+      - run: dart analyze --fatal-infos
+      - run: dart format --output=none --set-exit-if-changed .
+        if: ${{ matrix.sdk == 'stable' }}
+      - run: dart test --platform vm
+      - run: dart test --platform chrome
+      - run: dart test --platform chrome --compiler dart2wasm
+
+  # Run analysis against the oldest supported pub constraints.
+  downgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
+      - run: dart pub downgrade
+      - run: dart analyze --fatal-infos

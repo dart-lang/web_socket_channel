@@ -1,12 +1,21 @@
 [![CI](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml/badge.svg?branch=master)](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml)
+[![pub package](https://img.shields.io/pub/v/web_socket_channel.svg)](https://pub.dev/packages/web_socket_channel)
+[![package publisher](https://img.shields.io/pub/publisher/web_socket_channel.svg)](https://pub.dev/packages/web_socket_channel/publisher)
 
-The `web_socket_channel` package provides [`StreamChannel`][stream_channel]
-wrappers for WebSocket connections. It provides a cross-platform
-[`WebSocketChannel`][WebSocketChannel] API, a cross-platform implementation of
-that API that communicates over an underlying [`StreamChannel`][stream_channel],
-[an implementation][IOWebSocketChannel] that wraps `dart:io`'s `WebSocket`
-class, and [a similar implementation][HtmlWebSocketChannel] that wraps
-`dart:html`'s.
+`package:web_socket_channel` provides cross-platform
+[`StreamChannel`][stream_channel] wrappers for WebSocket connections.
+
+## Docs and Usage
+
+This package provides:
+
+- a cross-platform [`WebSocketChannel`][WebSocketChannel] API
+- a cross-platform implementation of that API that communicates over an
+  underlying [`StreamChannel`][stream_channel]
+- [an implementation][IOWebSocketChannel] that wraps the `dart:io` `WebSocket`
+  class
+- and [a similar implementation][HtmlWebSocketChannel] that wraps the browser's
+  web socket implementation
 
 [stream_channel]: https://pub.dev/packages/stream_channel
 [WebSocketChannel]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketChannel-class.html
@@ -14,16 +23,16 @@ class, and [a similar implementation][HtmlWebSocketChannel] that wraps
 [HtmlWebSocketChannel]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel.html/HtmlWebSocketChannel-class.html
 
 It also provides constants for the WebSocket protocol's pre-defined status codes
-in the [`status.dart` library][status]. It's strongly recommended that users
-import this library with the prefix `status`.
+in the [`status.dart` library][status] (it's recommended that users import this
+library with the prefix `status`).
 
 [status]: https://pub.dev/documentation/web_socket_channel/latest/status/status-library.html
 
 ```dart
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-main() async {
+void main() async {
   final wsUrl = Uri.parse('ws://example.com');
   final channel = WebSocketChannel.connect(wsUrl);
 
@@ -36,7 +45,7 @@ main() async {
 }
 ```
 
-## `WebSocketChannel`
+## The `WebSocketChannel` class
 
 The [`WebSocketChannel`][WebSocketChannel] class's most important role is as the
 interface for WebSocket stream channels across all implementations and all

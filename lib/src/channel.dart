@@ -17,8 +17,8 @@ import 'exception.dart';
 
 /// A [StreamChannel] that communicates over a WebSocket.
 ///
-/// This is implemented by classes that use `dart:io` and `dart:html`.
-/// The [WebSocketChannel.new] constructor can also be used on any platform to
+/// This is implemented by classes that use `dart:io` and `package:web`. The
+/// [WebSocketChannel.new] constructor can also be used on any platform to
 /// connect to use the WebSocket protocol over a pre-existing channel.
 ///
 /// All implementations emit [WebSocketChannelException]s. These exceptions wrap
@@ -105,7 +105,7 @@ class WebSocketChannel extends StreamChannelMixin {
   /// Creates a new WebSocket handling messaging across an existing [channel].
   ///
   /// This is a cross-platform constructor; it doesn't use either `dart:io` or
-  /// `dart:html`. It's also HTTP-API-agnostic, which means that the initial
+  /// `package:web`. It's also HTTP-API-agnostic, which means that the initial
   /// [WebSocket handshake][] must have already been completed on the socket
   /// before this is called.
   ///

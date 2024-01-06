@@ -14,10 +14,10 @@ import 'src/channel.dart';
 import 'src/exception.dart';
 import 'src/web_helpers.dart';
 
-/// A [WebSocketChannel] that communicates using a `dart:html` [WebSocket].
+/// A [WebSocketChannel] that communicates using a browser [WebSocket].
 class HtmlWebSocketChannel extends StreamChannelMixin
     implements WebSocketChannel {
-  /// The underlying `dart:html` [WebSocket].
+  /// The underlying browser [WebSocket].
   final WebSocket innerWebSocket;
 
   @override
