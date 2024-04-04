@@ -1,5 +1,7 @@
 name: web_socket_channel
-version: 3.0.0-wip
+# package:test requires ^2.0 so changing this to 3.0.0 would cause version
+# solving to fail. Update `package:test` and change to 3.0.0-wip before submit.
+version: 2.9.9-wip
 description: >-
   StreamChannel wrappers for WebSockets. Provides a cross-platform
   WebSocketChannel API, a cross-platform implementation of that API that

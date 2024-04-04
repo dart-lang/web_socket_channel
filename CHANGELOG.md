@@ -1,6 +1,7 @@
-## 3.0.0-wip
+## 2.9.9-wip
 
-- Provide an adapter around `package:web_socket` `WebSocket`s.
+- Provide an adapter around `package:web_socket` `WebSocket`s and make it the
+  default implementation for `WebSocketChannel.connect`.
 
 ## 2.4.5
 
