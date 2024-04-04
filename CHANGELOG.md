@@ -1,8 +1,15 @@
-## 2.5.0
+## 3.0.0-wip
+
+- Provide an adapter around `package:web_socket` `WebSocket`s.
+
+## 2.4.5
+
+- use secure random number generator for frame masking.
+
 ## 2.4.4
 
-* Require Dart `^3.3`
-* Require `package:web` `^0.5.0`.
+- Require Dart `^3.3`
+- Require `package:web` `^0.5.0`.
 
 ## 2.4.3
 
