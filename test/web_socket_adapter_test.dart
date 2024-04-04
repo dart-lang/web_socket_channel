@@ -11,7 +11,8 @@ import 'package:web_socket/web_socket.dart';
 import 'package:web_socket_channel/src/exception.dart';
 import 'package:web_socket_channel/web_socket_adapter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'echo_server_vm.dart' if (dart.library.html) 'echo_server_web.dart';
+import 'echo_server_vm.dart'
+    if (dart.library.js_interop) 'echo_server_web.dart';
 
 void main() {
   group('WebSocketWebSocketChannelAdapter', () {
@@ -22,7 +23,10 @@ void main() {
     setUp(() async {
       httpServerChannel = await startServer();
       httpServerQueue = StreamQueue(httpServerChannel.stream);
-      uri = Uri.parse('ws://localhost:${await httpServerQueue.next}');
+
+      // When run under dart2wasm, JSON numbers are always returned as [double].
+      final port = ((await httpServerQueue.next) as num).toInt();
+      uri = Uri.parse('ws://localhost:$port');
     });
     tearDown(() async {
       httpServerChannel.sink.add(null);
