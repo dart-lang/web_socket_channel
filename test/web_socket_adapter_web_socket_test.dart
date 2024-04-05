@@ -9,7 +9,7 @@ import 'package:stream_channel/stream_channel.dart';
 import 'package:test/test.dart';
 import 'package:web_socket/web_socket.dart';
 import 'package:web_socket_channel/src/exception.dart';
-import 'package:web_socket_channel/web_socket_adapter.dart';
+import 'package:web_socket_channel/web_socket_adapter_web_socket_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'echo_server_vm.dart'
     if (dart.library.js_interop) 'echo_server_web.dart';
@@ -34,20 +34,20 @@ void main() {
 
     test('failed connect', () async {
       final channel =
-          WebSocketWebSocketChannelAdapter.connect(Uri.parse('ws://notahost'));
+          WebSocketAdapterWebSocketChannel.connect(Uri.parse('ws://notahost'));
 
       await expectLater(
           channel.ready, throwsA(isA<WebSocketChannelException>()));
     });
 
     test('good connect', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       await channel.sink.close();
     });
 
     test('echo empty text', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add('');
       expect(await channel.stream.first, '');
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('echo empty binary', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add(Uint8List.fromList(<int>[]));
       expect(await channel.stream.first, isEmpty);
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('echo hello', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add('hello');
       expect(await channel.stream.first, 'hello');
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('echo [1,2,3]', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add([1, 2, 3]);
       expect(await channel.stream.first, [1, 2, 3]);
@@ -79,7 +79,7 @@ void main() {
     });
 
     test('alternative string and binary request and response', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add('This count says:');
       channel.sink.add([1, 2, 3]);
@@ -94,7 +94,7 @@ void main() {
     });
 
     test('remote close', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       channel.sink.add('close'); // Asks the peer to close.
       // Give the server time to send a close frame.
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('local close', () async {
-      final channel = WebSocketWebSocketChannelAdapter.connect(uri);
+      final channel = WebSocketAdapterWebSocketChannel.connect(uri);
       await expectLater(channel.ready, completes);
       await channel.sink.close(3005, 'please close');
       expect(channel.closeCode, null);
@@ -114,7 +114,7 @@ void main() {
 
     test('fromWebSocket', () async {
       final webSocket = await WebSocket.connect(uri);
-      final channel = WebSocketWebSocketChannelAdapter.fromWebSocket(webSocket);
+      final channel = WebSocketAdapterWebSocketChannel.fromWebSocket(webSocket);
 
       await expectLater(channel.ready, completes);
       channel.sink.add('This count says:');

@@ -13,7 +13,7 @@ import 'src/channel.dart';
 import 'src/exception.dart';
 
 /// A [WebSocketChannel] implemented using [WebSocket].
-class WebSocketWebSocketChannelAdapter extends StreamChannelMixin
+class WebSocketAdapterWebSocketChannel extends StreamChannelMixin
     implements WebSocketChannel {
   @override
   String? get protocol => _protocol;
@@ -43,7 +43,6 @@ class WebSocketWebSocketChannelAdapter extends StreamChannelMixin
   final _readyCompleter = Completer<void>();
 
   @override
-  Future<void> get ready => _readyCompleter.future;
 
   @override
   Stream get stream => _controller.foreign.stream;
@@ -60,20 +59,20 @@ class WebSocketWebSocketChannelAdapter extends StreamChannelMixin
   /// the peer is able to select. See
   /// [RFC-6455 1.9](https://datatracker.ietf.org/doc/html/rfc6455#section-1.9).
   ///
-  /// After construction, the [WebSocketWebSocketChannelAdapter] may not be
+  /// After construction, the [WebSocketAdapterWebSocketChannel] may not be
   /// connected to the peer. The [ready] future will complete after the channel
   /// is connected. If there are errors creating the connection the [ready]
   /// future will complete with an error.
-  factory WebSocketWebSocketChannelAdapter.connect(Uri url,
+  factory WebSocketAdapterWebSocketChannel.connect(Uri url,
           {Iterable<String>? protocols}) =>
-      WebSocketWebSocketChannelAdapter._(
+      WebSocketAdapterWebSocketChannel._(
           WebSocket.connect(url, protocols: protocols));
 
   // Create a [WebSocketWebSocketChannelAdapter] from an existing [WebSocket].
-  factory WebSocketWebSocketChannelAdapter.fromWebSocket(WebSocket webSocket) =>
-      WebSocketWebSocketChannelAdapter._(Future.value(webSocket));
+  factory WebSocketAdapterWebSocketChannel.fromWebSocket(WebSocket webSocket) =>
+      WebSocketAdapterWebSocketChannel._(Future.value(webSocket));
 
-  WebSocketWebSocketChannelAdapter._(Future<WebSocket> webSocketFuture) {
+  WebSocketAdapterWebSocketChannel._(Future<WebSocket> webSocketFuture) {
     webSocketFuture.then((webSocket) {
       var remoteClosed = false;
       webSocket.events.listen((event) {
@@ -121,9 +120,9 @@ class WebSocketWebSocketChannelAdapter extends StreamChannelMixin
 /// A [WebSocketSink] that tracks the close code and reason passed to [close].
 class _WebSocketSink extends DelegatingStreamSink implements WebSocketSink {
   /// The channel to which this sink belongs.
-  final WebSocketWebSocketChannelAdapter _channel;
+  final WebSocketAdapterWebSocketChannel _channel;
 
-  _WebSocketSink(WebSocketWebSocketChannelAdapter channel)
+  _WebSocketSink(WebSocketAdapterWebSocketChannel channel)
       : _channel = channel,
         super(channel._controller.foreign.sink);
 

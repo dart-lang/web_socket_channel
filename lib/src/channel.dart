@@ -9,7 +9,7 @@ import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
 import 'package:stream_channel/stream_channel.dart';
 
-import '../web_socket_adapter.dart';
+import '../web_socket_adapter_web_socket_channel.dart';
 import 'copy/web_socket_impl.dart';
 import 'exception.dart';
 
@@ -139,7 +139,7 @@ class WebSocketChannel extends StreamChannelMixin {
   /// If there are errors creating the connection the [ready] future will
   /// complete with an error.
   factory WebSocketChannel.connect(Uri uri, {Iterable<String>? protocols}) =>
-      WebSocketWebSocketChannelAdapter.connect(uri, protocols: protocols);
+      WebSocketAdapterWebSocketChannel.connect(uri, protocols: protocols);
 }
 
 /// The sink exposed by a [WebSocketChannel].
