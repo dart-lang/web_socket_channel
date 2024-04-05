@@ -43,6 +43,7 @@ class WebSocketAdapterWebSocketChannel extends StreamChannelMixin
   final _readyCompleter = Completer<void>();
 
   @override
+  Future<void> get ready => _readyCompleter.future;
 
   @override
   Stream get stream => _controller.foreign.stream;
