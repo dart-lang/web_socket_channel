@@ -20,5 +20,8 @@ dev_dependencies:
   dart_flutter_team_lints: ^2.0.0
   test: ^1.16.0
 
+# Remove this when versions of `package:test` and `shelf_web_socket` that support
+# channel_web_socket 3.0 are released.
 dependency_overrides:
+  shelf_web_socket: 1.0.4
   test: 1.25.2
