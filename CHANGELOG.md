@@ -3,7 +3,6 @@
 - Provide an adapter around `package:web_socket` `WebSocket`s and make it the
   default implementation for `WebSocketChannel.connect`.
 - **BREAKING**: Remove `WebSocketChannel` constructor
-- **BREAKING**: Remove `WebSocketChannel.signKey`.
 
 ## 2.4.5
 
