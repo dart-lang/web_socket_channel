@@ -72,7 +72,7 @@ class WebSocketAdapterWebSocketChannel extends StreamChannelMixin
   // Construct a [WebSocketWebSocketChannelAdapter] from an existing
   // [WebSocket].
   WebSocketAdapterWebSocketChannel(FutureOr<WebSocket> webSocket) {
-    late Future<WebSocket> webSocketFuture;
+    Future<WebSocket> webSocketFuture;
     if (webSocket is WebSocket) {
       webSocketFuture = Future.value(webSocket);
     } else {
@@ -118,7 +118,7 @@ class WebSocketAdapterWebSocketChannel extends StreamChannelMixin
       _protocol = webSocket.protocol;
       _readyCompleter.complete();
     }, onError: (Object e) {
-      late Exception error;
+      Exception error;
       if (e is TimeoutException) {
         // Required for backwards compatibility with `IOWebSocketChannel`.
         error = e;
