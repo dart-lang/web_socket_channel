@@ -105,7 +105,7 @@ abstract interface class WebSocketChannel extends StreamChannelMixin {
   /// If there are errors creating the connection the [ready] future will
   /// complete with an error.
   static WebSocketChannel connect(Uri uri, {Iterable<String>? protocols}) =>
-      WebSocketAdapterWebSocketChannel.connect(uri, protocols: protocols);
+      AdapterWebSocketChannel.connect(uri, protocols: protocols);
 }
 
 /// The sink exposed by a [WebSocketChannel].
