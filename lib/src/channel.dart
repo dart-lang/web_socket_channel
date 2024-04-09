@@ -9,7 +9,7 @@ import 'package:async/async.dart';
 import 'package:crypto/crypto.dart';
 import 'package:stream_channel/stream_channel.dart';
 
-import '../web_socket_adapter_web_socket_channel.dart';
+import '../adapter_web_socket_channel.dart';
 import 'exception.dart';
 
 const String _webSocketGUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
