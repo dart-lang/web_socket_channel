@@ -6,6 +6,10 @@
 - **BREAKING**: Make `WebSocketChannel` an `abstract interface`.
 - **BREAKING**: `IOWebSocketChannel.ready` will throw
   `WebSocketChannelException` instead of `WebSocketException`.
+- `HtmlWebSocketChannel.connect` is deprecated, use `WebSocketChannel.connect`
+  instead.
+- Deprecated the `HtmlWebSocketChannel` constructor, use
+  `WebSocketChannel.connect` instead.
 
 ## 2.4.5
 
