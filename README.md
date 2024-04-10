@@ -12,7 +12,7 @@ It provides a cross-platform
 that API that communicates over an underlying [`StreamChannel`][stream_channel],
 [an implementation][IOWebSocketChannel] that wraps `dart:io`'s `WebSocket`
 class, and [a similar implementation][HtmlWebSocketChannel] that wraps
-`dart:html`'s.
+`package:web`'s.
 
 [stream_channel]: https://pub.dev/packages/stream_channel
 [WebSocketChannel]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketChannel-class.html
@@ -27,7 +27,6 @@ import this library with the prefix `status`.
 
 ```dart
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
 main() async {
   final wsUrl = Uri.parse('ws://example.com');
@@ -37,7 +36,7 @@ main() async {
 
   channel.stream.listen((message) {
     channel.sink.add('received!');
-    channel.sink.close(status.goingAway);
+    channel.sink.close();
   });
 }
 ```

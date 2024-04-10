@@ -2,7 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() async {
@@ -13,6 +12,6 @@ void main() async {
 
   channel.stream.listen((message) {
     channel.sink.add('received!');
-    channel.sink.close(status.goingAway);
+    channel.sink.close();
   });
 }
