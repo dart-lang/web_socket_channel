@@ -146,5 +146,16 @@ void main() {
         [4, 5, 6]
       ]);
     });
+
+    test('close race', () async {
+      for (var i = 0; i < 100; ++i) {
+        final channel = AdapterWebSocketChannel.connect(uri);
+        await expectLater(channel.ready, completes);
+        channel.sink.add('close'); // Asks the peer to close.
+        // Give the server time to send a close frame.
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+        await channel.sink.close();
+      }
+    });
   });
 }
