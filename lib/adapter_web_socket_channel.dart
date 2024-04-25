@@ -107,11 +107,10 @@ class AdapterWebSocketChannel extends StreamChannelMixin
           // There is nowhere to surface this error; `_controller.local.sink`
           // has already been closed.
         }
-      }, onDone: () {
+      }, onDone: () async {
         try {
-          webSocket.close(_localCloseCode, _localCloseReason);
+          await webSocket.close(_localCloseCode, _localCloseReason);
         } on WebSocketConnectionClosed {
-          print('Hit it!');
           // It is not an error to close an already-closed `WebSocketChannel`.
         }
       });
