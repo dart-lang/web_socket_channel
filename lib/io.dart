@@ -33,6 +33,35 @@ class IOWebSocketChannel extends AdapterWebSocketChannel {
   ///
   /// If there's an error connecting, the channel's stream emits a
   /// [WebSocketChannelException] wrapping that error and then closes.
+  ///
+  /// **DEPRECATED**: Instead of using this method, use [IOWebSocket] with
+  /// [AdapterWebSocketChannel]. For example:
+  ///
+  /// ```dart
+  /// import 'dart:io' show WebSocket;
+  ///
+  /// import 'package:web_socket/io_web_socket.dart' show IOWebSocket;
+  /// import 'package:web_socket_channel/adapter_web_socket_channel.dart';
+  ///
+  /// void main() async {
+  ///   final ioWebSocket = await WebSocket.connect('<url>', protocols: [
+  ///     'chatV1',
+  ///     'chatV2',
+  ///   ], headers: {
+  ///     'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV',
+  ///   }).timeout(const Duration(milliseconds: 500));
+  ///
+  ///   ioWebSocket.pingInterval = const Duration(seconds: 10);
+  ///
+  ///   final channel =
+  ///       AdapterWebSocketChannel(IOWebSocket.fromWebSocket(ioWebSocket));
+  ///
+  ///   await channel.ready;
+  ///
+  ///   // Use the `WebSocketChannel`.
+  /// }
+  /// ```
+  @Deprecated('Use IOWebSocket with AdapterWebSocketChannel')
   factory IOWebSocketChannel.connect(
     Object url, {
     Iterable<String>? protocols,
@@ -56,6 +85,36 @@ class IOWebSocketChannel extends AdapterWebSocketChannel {
   }
 
   /// Creates a channel wrapping [webSocket].
+  ///
+  /// **DEPRECATED**: Instead, use [IOWebSocket] with [AdapterWebSocketChannel].
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// import 'dart:io' show WebSocket;
+  ///
+  /// import 'package:web_socket/io_web_socket.dart' show IOWebSocket;
+  /// import 'package:web_socket_channel/adapter_web_socket_channel.dart';
+  ///
+  /// void main() async {
+  ///   final ioWebSocket = await WebSocket.connect('<url>', protocols: [
+  ///     'chatV1',
+  ///     'chatV2',
+  ///   ], headers: {
+  ///     'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV',
+  ///   }).timeout(const Duration(milliseconds: 500));
+  ///
+  ///   ioWebSocket.pingInterval = const Duration(seconds: 10);
+  ///
+  ///   final channel =
+  ///       AdapterWebSocketChannel(IOWebSocket.fromWebSocket(ioWebSocket));
+  ///
+  ///   await channel.ready;
+  ///
+  ///   // Use the `WebSocketChannel`.
+  /// }
+  /// ```
+  @Deprecated('Use IOWebSocket with AdapterWebSocketChannel')
   IOWebSocketChannel(FutureOr<WebSocket> webSocket)
       : super(webSocket is Future<WebSocket>
             ? webSocket.then(IOWebSocket.fromWebSocket) as FutureOr<IOWebSocket>

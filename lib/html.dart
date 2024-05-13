@@ -72,6 +72,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   /// received by this socket. It defaults to [BinaryType.list], which causes
   /// binary messages to be delivered as [Uint8List]s. If it's
   /// [BinaryType.blob], they're delivered as [Blob]s instead.
+  @Deprecated('Use WebSocketChannel.connect() instead')
   HtmlWebSocketChannel.connect(Object url,
       {Iterable<String>? protocols, BinaryType? binaryType})
       : this(
@@ -85,6 +86,7 @@ class HtmlWebSocketChannel extends StreamChannelMixin
   ///
   /// The parameter [webSocket] should be either a dart:html `WebSocket`
   /// instance or a package:web [WebSocket] instance.
+  @Deprecated('Use WebSocketChannel.connect() instead')
   HtmlWebSocketChannel(Object /*WebSocket*/ webSocket)
       : innerWebSocket = webSocket as WebSocket {
     _readyCompleter = Completer();

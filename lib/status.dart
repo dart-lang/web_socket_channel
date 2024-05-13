@@ -16,6 +16,8 @@
 ///   channel.close(status.goingAway);
 /// }
 /// ```
+@Deprecated('RFC-6455 reserves codes 1000-4999 for applications. '
+    'Some WebSocket implementations only allow those codes to be set.')
 library web_socket_channel.status;
 
 import 'dart:core';
