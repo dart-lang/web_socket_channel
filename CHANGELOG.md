@@ -1,6 +1,9 @@
-## 3.0.1-wip
+## 3.1.0-wip
 
 - Remove unnecessary `dependency_overrides`.
+- Add a `fakes` function that returns a connected pair of `WebSocketChannels`
+  useful for testing. In the context of tests, this can be used in place
+  of the `WebSocketChannel` constructor, which was removed in version 3.0.0.
 
 ## 3.0.0
 
