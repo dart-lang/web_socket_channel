@@ -64,3 +64,10 @@ other socket exactly why they're closing the connection.
 [sink]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketChannel/sink.html
 [WebSocketSink]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketSink-class.html
 [sink.close]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketSink/close.html
+
+`WebSocketChannel` also works as a cross-platform implementation of the
+WebSocket protocol. The [`WebSocketChannel.connect` constructor][connect]
+connects to a listening server using the appropriate implementation for the
+platform.
+
+[connect]: https://pub.dev/documentation/web_socket_channel/latest/web_socket_channel/WebSocketChannel/WebSocketChannel.connect.html
