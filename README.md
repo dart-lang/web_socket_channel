@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> This repo has moved to https://github.com/dart-lang/http/tree/master/pkgs/web_socket_channel
+
 [![CI](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml/badge.svg?branch=master)](https://github.com/dart-lang/web_socket_channel/actions/workflows/test-package.yml)
 [![pub package](https://img.shields.io/pub/v/web_socket_channel.svg)](https://pub.dev/packages/web_socket_channel)
 [![package publisher](https://img.shields.io/pub/publisher/web_socket_channel.svg)](https://pub.dev/packages/web_socket_channel/publisher)
